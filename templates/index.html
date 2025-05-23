@@ -39,8 +39,8 @@
 
 <script>
     document.getElementById('start-btn').addEventListener('click', function () {
-        document.getElementById('start').style.display = 'none'; // Hide the button's container
-        document.getElementById('prompt-area').style.display = 'block'; // Show the other div 
+        document.getElementById('start').style.display = 'none'; 
+        document.getElementById('prompt-area').style.display = 'block'; 
         document.getElementById('progress-container').style.display = 'block';
     });
 
@@ -49,7 +49,7 @@
         let progressPercent;
         
         if (currentStep > totalSteps) {
-            progressPercent = 100;  // explicitly set 100% on completion
+            progressPercent = 100; 
         } else {
             progressPercent = ((currentStep) / totalSteps) * 100;
         }
@@ -61,14 +61,14 @@
     const userId = 'user123';
     let currentStep = 1;
     let savedResponses = {};
-    let currentPrompt = null;  // Store the current prompt globally
+    let currentPrompt = null;  
 
     async function loadPrompt(step) {
         document.getElementById('suggestion-text').innerText = '';
         const res = await fetch(`/api/prompt/${step}`);
         if (res.ok) {
             const data = await res.json();
-            currentPrompt = data; // Save it globally
+            currentPrompt = data; 
             document.getElementById('prompt-label').innerText = data.prompt;
             document.getElementById('context-text').innerText = data.context;
             document.getElementById('user-input').value = savedResponses[data.field] || '';
@@ -78,13 +78,13 @@
 
         updateProgressBar(step);
 
-            // Show/hide Back button
+            
         if (step > 1) {
             document.getElementById('back-btn').style.display = 'inline-block';
         } else {
             document.getElementById('back-btn').style.display = 'none';
         }
-        // Show/hide Analyze (skip) button
+        
         const skipBtn = document.getElementById('skip-btn');
         const suggestionEl = document.getElementById('suggestion-text');
 
@@ -117,7 +117,7 @@
             return;
         }
         const res = await fetch(`/api/suggestion/${value}`);
-        const html = await res.text();  // Not res.json()!
+        const html = await res.text();  
         return html
     }
 
@@ -129,7 +129,7 @@
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ jobd: jobd })
         }); 
-        const html = await res.text();  // Not res.json()!
+        const html = await res.text();  
         return html
     }
 
@@ -139,7 +139,7 @@
             return;
         }
         const res = await fetch(`/api/suggestionproject/${value}`);
-        const html = await res.text();  // Not res.json()!
+        const html = await res.text();  
         return html
     }
 
@@ -185,14 +185,14 @@ document.getElementById('skip-btn').addEventListener('click', async () => {
     const suggestionEl = document.getElementById('suggestion-text');
 
     if (!currentPrompt) return;
-    // Get suggestions before saving
+    
     const suggestions = await getSuggestions(currentPrompt.field, userInput);
 
     if (suggestions && suggestions.length > 0) {
         suggestionEl.innerHTML = suggestions;
         suggestionEl.style.display = 'block';
     } else {
-        suggestionEl.style.display = 'none'; // Hide box if no issues
+        suggestionEl.style.display = 'none'; 
     }
 });
 
@@ -222,7 +222,7 @@ function loadPromptOrComplete() {
         window.location.href = `/preview/${userId}`;
     });
 
-    // Start
+    
     loadPrompt(currentStep);
 </script>
 
