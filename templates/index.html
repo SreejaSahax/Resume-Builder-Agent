@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Resume Builder</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+</head>
+<body>
+    <div id="progress-container" style="display: none;">
+            <div id="progress-bar"></div>
+    </div>
+    <div class="container">
+        <h1>Resume Builder</h1>
+        <div id="start">
+            <h4 style="text-align: center;margin: 30px auto;max-width: 700px;color:rgb(43, 43, 65);">Craft a professional resume with guided prompts and intelligent analysis.<br>Receive real-time suggestions to enhance wording, align skills with job roles, and present your achievements more effectively.<br></h4>
+            <div class="button-wrapper-start">
+            <button id="start-btn">Get Started!</button>
+            </div>
+        </div>
+        <div id="prompt-area" style="display: none;">
+            <p id="context-text"></p>
+            <p id="suggestion-text" style="display:none; color: #000000; font-style: italic; margin-top: 5px;"></p>
+            <label id="prompt-label" for="user-input"></label><br />
+            <textarea id="user-input" rows="3" cols="50"></textarea><br />
+            <div class="button-wrapper">
+            <button id="back-btn" style="display:none;">Back</button>
+            <button id="skip-btn" style="display:none;">Analyze</button>
+            <button id="next-btn">Next</button>
+            </div>
+        </div>
+        <div id="completion-message" style="display:none;">
+            <div class="preview">
+            <h2>All steps completed!</h2>
+            <button id="preview-btn">Preview Resume</button>
+            </div>
+        </div>
+    </div>
+
+<script>
+    document.getElementById('start-btn').addEventListener('click', function () {
+        document.getElementById('start').style.display = 'none'; // Hide the button's container
+        document.getElementById('prompt-area').style.display = 'block'; // Show the other div 
+        document.getElementById('progress-container').style.display = 'block';
+    });
+
+    function updateProgressBar() {
+        const totalSteps = 10;
+        let progressPercent;
+        
+        if (currentStep > totalSteps) {
+            progressPercent = 100;  // explicitly set 100% on completion
+        } else {
+            progressPercent = ((currentStep) / totalSteps) * 100;
+        }
+        
+        document.getElementById('progress-bar').style.width = progressPercent + '%';
+        }
+
+
+    const userId = 'user123';
+    let currentStep = 1;
+    let savedResponses = {};
+    let currentPrompt = null;  // Store the current prompt globally
+
+    async function loadPrompt(step) {
+        document.getElementById('suggestion-text').innerText = '';
+        const res = await fetch(`/api/prompt/${step}`);
+        if (res.ok) {
+            const data = await res.json();
+            currentPrompt = data; // Save it globally
+            document.getElementById('prompt-label').innerText = data.prompt;
+            document.getElementById('context-text').innerText = data.context;
+            document.getElementById('user-input').value = savedResponses[data.field] || '';
+            document.getElementById('user-input').addEventListener('input', (e) => {
+            suggestImprovements(currentPrompt.field, e.target.value);
+            });
+
+        updateProgressBar(step);
+
+            // Show/hide Back button
+        if (step > 1) {
+            document.getElementById('back-btn').style.display = 'inline-block';
+        } else {
+            document.getElementById('back-btn').style.display = 'none';
+        }
+        // Show/hide Analyze (skip) button
+        const skipBtn = document.getElementById('skip-btn');
+        const suggestionEl = document.getElementById('suggestion-text');
+
+        if (data.field === "summary" || data.field === "skills" || data.field === "projects") {
+            skipBtn.style.display = 'inline-block';
+        } else {
+            skipBtn.style.display = 'none';
+            suggestionEl.style.display = 'none';
+        }
+        if (data.field === "summary" || data.field === "projects") {
+            skipBtn.innerText="Paraphrase"
+        }
+        if (data.field === "skills" ) {
+            skipBtn.innerText="Suggest"
+        }
+
+
+        } else {
+            alert("No more prompts.");
+        }
+
+    }
+
+    async function getSuggestions(field, value) {
+    let suggestions = [];
+
+    if (field === "summary") {
+        if (!value) {
+            alert("Please enter your response.");
+            return;
+        }
+        const res = await fetch(`/api/suggestion/${value}`);
+        const html = await res.text();  // Not res.json()!
+        return html
+    }
+
+    if (field === "skills") {
+        const jobd = savedResponses['jobd'] || "";
+        console.log("job desc:", jobd);
+        const res = await fetch('/api/suggestionskill', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ jobd: jobd })
+        }); 
+        const html = await res.text();  // Not res.json()!
+        return html
+    }
+
+    if (field === "projects") {
+        if (!value) {
+            alert("Please enter your response.");
+            return;
+        }
+        const res = await fetch(`/api/suggestionproject/${value}`);
+        const html = await res.text();  // Not res.json()!
+        return html
+    }
+
+    return suggestions;
+}
+
+
+
+    async function saveResponse(field, response) {
+        await fetch('/api/save_response', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({user_id: userId, field: field, response: response})
+        });
+        savedResponses[field] = response;
+    }
+
+    document.getElementById('next-btn').addEventListener('click', async () => {
+    const userInput = document.getElementById('user-input').value.trim();
+    const suggestionEl = document.getElementById('suggestion-text');
+    const skipBtn = document.getElementById('skip-btn');
+
+    if (!userInput) {
+        alert("Please enter your response.");
+        return;
+    }
+
+    if (!currentPrompt) {
+        alert("No prompt loaded.");
+        return;
+    }
+    
+    suggestionEl.style.display = 'none';
+    await saveResponse(currentPrompt.field, userInput);
+    currentStep++;
+
+    loadPromptOrComplete();
+});
+
+document.getElementById('skip-btn').addEventListener('click', async () => {
+    const userInput = document.getElementById('user-input').value.trim();
+    const skipBtn = document.getElementById('skip-btn');
+    const suggestionEl = document.getElementById('suggestion-text');
+
+    if (!currentPrompt) return;
+    // Get suggestions before saving
+    const suggestions = await getSuggestions(currentPrompt.field, userInput);
+
+    if (suggestions && suggestions.length > 0) {
+        suggestionEl.innerHTML = suggestions;
+        suggestionEl.style.display = 'block';
+    } else {
+        suggestionEl.style.display = 'none'; // Hide box if no issues
+    }
+});
+
+function loadPromptOrComplete() {
+    if (currentStep > 10) {
+        document.getElementById('prompt-area').style.display = 'none';
+        document.getElementById('completion-message').style.display = 'block';
+        document.getElementById('progress-bar').style.backgroundColor= '#163652';
+    } else {
+        loadPrompt(currentStep);
+
+    }
+}
+
+
+    document.getElementById('back-btn').addEventListener('click', async () => {
+        if (currentStep > 1) {
+            currentStep--;
+            await loadPrompt(currentStep);
+        } else {
+            alert("You are at the first step.");
+        }
+    });
+
+
+    document.getElementById('preview-btn').addEventListener('click', () => {
+        window.location.href = `/preview/${userId}`;
+    });
+
+    // Start
+    loadPrompt(currentStep);
+</script>
+
+</body>
+</html>

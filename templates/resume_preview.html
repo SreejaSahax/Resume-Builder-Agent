@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+    <title>Resume Preview</title>
+    <style>
+        iframe {
+            width: 100%;
+            height: 90vh;
+            border: 2px solid rgba(151, 143, 143, 0.8);
+            box-shadow: 0 0 10px rgba(169, 153, 238, 0.2);
+        }
+        a.button {
+        display: inline-block;
+        background-color: #004b9b;      /* Bootstrap blue */
+        color: white;
+        padding: 10px 16px;
+        text-decoration: none;
+        border-radius: 6px;             /* slightly round corners */
+        font-size: 1em;
+        margin-right: 10px;
+        transition: background-color 0.3s ease;
+        }
+
+        a.button:hover {
+            background-color: #013c7c;      /* darker blue on hover */
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+    <center>
+    <h1>Resume Preview</h1>
+    <iframe src="{{ url_for('resume_content', user_id=user_id) }}"></iframe>
+    <br>
+    <a href="/" class="button">Back to Builder</a> &nbsp; &nbsp;
+    <a href="{{ url_for('download_resume', user_id=user_id) }}" class="button">Download as PDF</a><br><br>
+    </center></div>
+</body>
+</html>

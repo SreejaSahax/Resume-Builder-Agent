@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>{{ data.name }} - Resume</title>
+    <style>
+        body {
+            font-family: Calibri, Helvetica, Arial, sans-serif;
+            color: #000;
+            margin: 40px;
+            line-height: 1.5;
+        }
+        h1 {
+            text-align: center;
+            font-size: 26px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        .contact {
+            text-align: center;
+            font-size: 15px;
+            margin-bottom: 20px;
+        }
+        .contact p {
+            margin: 2px 0;
+        }
+        h2 {
+            font-size: 15px;
+            text-transform: uppercase;
+            border-bottom: 1px solid #aaa;
+            padding-bottom: 3px;
+            margin-top: 30px;
+            margin-bottom: 10px;
+        }
+        p {
+            margin: 5px 0;
+            font-size: 15px;
+        }
+        .section {
+            margin-bottom: 20px;
+        }
+        a {
+            color: #000;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>{{ data.name }}</h1>
+    <div class="contact">
+        <p>{{ data.email }} | {{ data.mobile }} | 
+           <a href="{{ data.linkdin }}">{{ data.linkdin }}</a></p>
+    </div>
+
+    <div class="section">
+        <h2>Professional Summary</h2>
+        <p>{{ data.summary }}</p>
+    </div>
+
+    <div class="section">
+        <h2>Education</h2>
+        <p>{% for edu in data.education.split('\n') %}
+            <br>{{ edu }}
+        {% endfor %}</p>
+    </div>
+
+    <div class="section">
+        <h2>Work Experience</h2>
+        <p>{% for exp in data.experience.split('\n') %}
+            <br>{{ exp }}
+        {% endfor %}</p>
+    </div>
+
+    <div class="section">
+        <h2>Skills</h2>
+        <p>{% for skill in data.skills.split('\n') %}
+            <br>{{ skill }}
+        {% endfor %}</p>
+    </div>
+
+    <div class="section">
+        <h2>Projects</h2>
+        <p>{% for proj in data.projects.split('\n') %}
+            <br>{{ proj }}
+        {% endfor %}</p>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,103 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 30px;
+    background-image: url('coolbackgrounds-topography-micron.svg');
+    background-size: cover; 
+    background-repeat: no-repeat;
+    background-position: center;
+    
+}
+
+.container {
+    background-color: rgba(255, 255, 255, 0.329); /* semi-transparent white */
+    backdrop-filter: blur(15px); /* adds the blur */
+    -webkit-backdrop-filter: blur(10px); /* for Safari support */
+    max-width: 700px;
+    margin: auto;
+    padding: 25px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.486);
+    border-radius: 5px;
+    border: 1px solid rgba(255, 255, 255, 0.342); /* optional: subtle border for contrast */
+}
+
+h1 {
+    text-align: center;
+    color: #012e5c;
+    margin-top: 0;          /* moves it up by removing default top margin */
+    margin-bottom: 15px;    /* space below */
+    font-size: 2.8em;       /* bigger font size */
+    font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* example font, use any */
+    font-weight: 600;       /* a bit bolder */
+}
+
+#prompt-area p, label {
+    font-size: 1.1em;
+    color: #242424;
+}
+textarea {
+     width: 100%;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* match container font */
+    font-size: 1.1em;       /* increase font size */
+    font-weight: 200;       /* normal weight */
+    line-height: 1.2;       /* improve readability */
+    
+    padding: 10px 0.5px;
+    margin: 10px 0;
+    
+    background-color: rgba(255, 255, 255, 0.4); /* slightly whiter than container */
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(141, 142, 224, 0.493);
+    border-radius: 8px; /* rounded corners */
+    box-shadow: 0 0 10px rgba(0,0,0,0.05); /* subtle shadow */
+    resize: vertical; /* allow vertical resizing only (optional) */
+    outline: none; /* remove default blue outline on focus */
+}
+button {
+    padding: 10px 25px;
+    font-size: 1em;
+    background-color: #004b9b; 
+    border: none;
+    color: white;
+    border-radius: 4px;
+    cursor: pointer;
+}
+button:hover {
+    background-color: #013c7c;
+}
+.button-wrapper {
+    text-align: right;
+}
+.button-wrapper-start {
+    text-align: center;
+}
+.preview {
+    text-align: center;
+}
+#suggestion-text {
+    color: #000000;
+    background-color: rgba(255,255,255,0.4);
+    padding: 8px 10px;
+    border-left: 3px solid #004b9b;
+    border-radius: 4px;
+    font-size: 0.95em !important;
+    margin-top: 8px;
+}
+#progress-container {
+    max-width: 700px;
+    background-color: rgba(255, 255, 255, 0.329);
+    border-radius: 10px;
+    margin: 20px auto;
+    height: 10px;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.575); 
+}
+
+#progress-bar {
+    height: 100%;
+    width: 0%;
+    background-color: #012e5c;
+    border-radius: 10px;
+    transition: width 0.4s ease-in-out;
+}
