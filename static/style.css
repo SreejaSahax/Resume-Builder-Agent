@@ -10,25 +10,25 @@ body {
 }
 
 .container {
-    background-color: rgba(255, 255, 255, 0.329); /* semi-transparent white */
-    backdrop-filter: blur(15px); /* adds the blur */
-    -webkit-backdrop-filter: blur(10px); /* for Safari support */
+    background-color: rgba(255, 255, 255, 0.329); 
+    backdrop-filter: blur(15px); 
+    -webkit-backdrop-filter: blur(10px);
     max-width: 700px;
     margin: auto;
     padding: 25px;
     box-shadow: 0 0 15px rgba(0, 0, 0, 0.486);
     border-radius: 5px;
-    border: 1px solid rgba(255, 255, 255, 0.342); /* optional: subtle border for contrast */
+    border: 1px solid rgba(255, 255, 255, 0.342); 
 }
 
 h1 {
     text-align: center;
     color: #012e5c;
-    margin-top: 0;          /* moves it up by removing default top margin */
-    margin-bottom: 15px;    /* space below */
-    font-size: 2.8em;       /* bigger font size */
-    font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* example font, use any */
-    font-weight: 600;       /* a bit bolder */
+    margin-top: 0;          
+    margin-bottom: 15px;   
+    font-size: 2.8em;       
+    font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+    font-weight: 600;      
 }
 
 #prompt-area p, label {
@@ -37,22 +37,22 @@ h1 {
 }
 textarea {
      width: 100%;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* match container font */
-    font-size: 1.1em;       /* increase font size */
-    font-weight: 200;       /* normal weight */
-    line-height: 1.2;       /* improve readability */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 1.1em;       
+    font-weight: 200;      
+    line-height: 1.2;       
     
     padding: 10px 0.5px;
     margin: 10px 0;
     
-    background-color: rgba(255, 255, 255, 0.4); /* slightly whiter than container */
+    background-color: rgba(255, 255, 255, 0.4);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
     border: 1px solid rgba(141, 142, 224, 0.493);
-    border-radius: 8px; /* rounded corners */
-    box-shadow: 0 0 10px rgba(0,0,0,0.05); /* subtle shadow */
-    resize: vertical; /* allow vertical resizing only (optional) */
-    outline: none; /* remove default blue outline on focus */
+    border-radius: 8px; 
+    box-shadow: 0 0 10px rgba(0,0,0,0.05); 
+    resize: vertical; 
+    outline: none; 
 }
 button {
     padding: 10px 25px;
