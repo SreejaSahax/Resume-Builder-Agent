@@ -8,13 +8,13 @@ import markdown
 import tempfile
 from dotenv import load_dotenv
 
-# Load environment variables from .env file
+
 load_dotenv()
 
 app = Flask(__name__)
 
 GROQ_API_URL = "https://api.groq.com/openai/v1/chat/completions"
-# Access the API key
+
 api_key = os.getenv("API_KEY")
 
 def query_mistral(prompt):
@@ -47,7 +47,7 @@ def query_mistral(prompt):
 def suggestion(user_input):
     prompt = f"Analyze this user input for job relevance, tone, and skill alignment:\n\n{user_input}"
     output = query_mistral(prompt)
-    # Convert markdown to HTML
+    
     output_html = markdown.markdown(output)
     return output_html    
 
@@ -57,7 +57,7 @@ def suggestionskill():
     user_input=data.get('jobd','')
     prompt = f"Suggest and list skills required based on user input of job decsription:\n\n{user_input}"
     output = query_mistral(prompt)
-    # Convert markdown to HTML
+    
     output_html = markdown.markdown(output)
     return output_html    
 
@@ -65,14 +65,14 @@ def suggestionskill():
 def suggestionproject(user_input):
     prompt = f"Suggest better wording for projects entered by user:\n\n{user_input}"
     output = query_mistral(prompt)
-    # Convert markdown to HTML
+    
     output_html = markdown.markdown(output)
     return output_html  
 
-# In-memory store for user responses (simulate DB)
+
 user_data = {}
 
-# Sample prompts for building a resume, stepwise
+
 prompts = [
     {
         "step": 1,
@@ -138,12 +138,10 @@ prompts = [
 
 @app.route('/')
 def index():
-    # Serve the main frontend page
     return render_template('index.html')
 
 @app.route('/api/prompt/<int:step>', methods=['GET'])
 def get_prompt(step):
-    # Return prompt data for given step
     if 1 <= step <= len(prompts):
         return jsonify(prompts[step-1])
     else:
@@ -168,19 +166,17 @@ def save_response():
 
 @app.route('/api/generate_resume/<user_id>', methods=['GET'])
 def generate_resume(user_id):
-    # Check if user data exists
     if user_id not in user_data:
         return jsonify({"error": "User data not found"}), 404
 
     data = user_data[user_id]
 
-    # Render resume HTML from template with user data
+    
     resume_html = render_template('resume_template.html', data=data)
     return jsonify({"resume_html": resume_html})
 
 @app.route('/preview/<user_id>', methods=['GET','POST'])
 def preview_resume(user_id):
-    # Render a full page preview of the resume
     if user_id not in user_data:
         return "User data not found", 404
     data = user_data[user_id]
